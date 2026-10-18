@@ -1,0 +1,17 @@
+{
+  "name": "mmo-niulai",
+  "version": "1.0.0",
+  "description": "O-Level E Math & A Math practice studio with custom math keyboard, guided proofs, progress tracking and game loop.",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node --no-warnings server/index.js",
+    "dev": "node --no-warnings --watch server/index.js",
+    "test": "node --no-warnings test/run.js"
+  },
+  "engines": { "node": ">=22.5" },
+  "dependencies": {
+    "express": "^5.1.0",
+    "katex": "^0.16.22"
+  }
+}
