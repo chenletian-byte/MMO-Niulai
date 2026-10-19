@@ -487,7 +487,7 @@ add({
         [S(L('△OMA≅△OMB'), [L('△OMA≅△MOB'), L('△OMA∼△OMB')]), R('rhs', ['sas', 'sss', 'asa'])],
         [hard ? S(L('AM=BM')) : `$${SL(L('AM = BM'))}$`, R('cong_sides', ['radii', 'midpoint'])],
       ];
-      sol = ['A right angle, equal hypotenuses (the radii) and a common side give congruence by right angle-hypotenuse-side (RHS).', 'This is exactly why the perpendicular from the centre bisects a chord.'];
+      sol = ['A right angle, equal hypotenuses (the radii) and a common side give congruence by RHS.', 'This is exactly why the perpendicular from the centre bisects a chord.'];
     } else {
       F.pt('A', 60, 45).pt('B', 260, 45).pt('C', 260, 185).pt('D', 60, 185).pt('X', 160, 115, { off: [14, 0] });
       F.seg('A', 'B').seg('D', 'C').seg('A', 'C').seg('B', 'D').arrow('A', 'B').arrow('D', 'C');
@@ -500,7 +500,7 @@ add({
         [S(L('△ABX≅△CDX'), [L('△ABX≅△DCX'), L('△ABX∼△CDX')]), R(['aas', 'asa'], ['sas', 'sss', 'rhs'])],
         [hard ? S(L('AX=CX')) : `$${SL(L('AX = CX'))}$`, R('cong_sides', ['given', 'midpoint'])],
       ];
-      sol = ['Parallel lines give two pairs of alternate angles.', 'Two angles and a corresponding side give congruence by angle-angle-side (AAS); many schools also accept angle-side-angle (ASA).'];
+      sol = ['Parallel lines give two pairs of alternate angles.', 'Two angles and a corresponding side give congruence by AAS; many schools also accept ASA.'];
     }
     const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
     return { stem, diagram: svg, parts: [P('p', { lines, group: 'cong', prompt: 'Complete the proof.' })], solution: sol.concat(['Order of letters matters: matching vertices must be in the same position in both triangles.']) };

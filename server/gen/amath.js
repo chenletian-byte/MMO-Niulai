@@ -654,7 +654,7 @@ add({
             [hard ? S(L('∠ATO=∠BTO')) : `$${SL(L('∠ATO = ∠BTO'))}$`, R('cong_angles', ['alt_seg', 'isos'])],
           ],
         })],
-        solution: ['The radius is perpendicular to the tangent, which gives the right angles; $OT$ is the common hypotenuse, so the triangles are congruent by right angle-hypotenuse-side (RHS).', 'This proves the “tangents from an external point” property — so in an exam you may not quote it as the reason here.'],
+        solution: ['The radius is perpendicular to the tangent, which gives the right angles; $OT$ is the common hypotenuse, so the triangles are congruent by RHS.', 'This proves the “tangents from an external point” property — so in an exam you may not quote it as the reason here.'],
       };
     }
     const { L, LT, map } = relabel(r, ['A', 'B', 'C', 'M', 'N']);
