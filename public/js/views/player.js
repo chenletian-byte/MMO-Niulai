@@ -413,7 +413,7 @@ export function Player(q, { mode = 'practice', onSubmit, onRedo, number } = {}) 
       guideCtl.append(
         h('button', { class: 'btn small primary', onclick: () => { addStep(allSteps[shownSteps.length], shownSteps.length, allSteps.length); drawGuideCtl(); } }, shownSteps.length ? 'Next step' : 'Start the walkthrough'),
         h('button', { class: 'btn small ghost', onclick: () => { while (shownSteps.length < allSteps.length) addStep(allSteps[shownSteps.length], shownSteps.length, allSteps.length); drawGuideCtl(); } }, 'Show all steps'));
-    } else guideCtl.append(h('span', { class: 'tiny muted' }, 'Tap any step to see it on the diagram again.'));
+    } else if (dia && dia.has()) guideCtl.append(h('span', { class: 'tiny muted' }, 'Tap any step to see it on the diagram again.'));
   };
 
   // ---------- footer ----------
