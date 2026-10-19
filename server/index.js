@@ -227,6 +227,13 @@ function recordAnswer(u, row, q, answers, timeMs, context) {
       else db.prepare('UPDATE mistakes SET retries=retries+1 WHERE user_id=? AND qid=?').run(u.id, q.origin);
     }
     gained = applyResult(u, q, graded, { context, firstOfType });
+    if (q.hints && context !== 'mock') {
+      // hints used: half XP for this question
+      const cut = Math.floor(gained.xp / 2);
+      u.xp -= cut;
+      gained.xp -= cut;
+      gained.hintPenalty = cut;
+    }
     const prog = subjProg(u, q.subject);
     prog.xp = (prog.xp || 0) + gained.xp;
     if (context === 'vault' && graded.ok) {
@@ -257,6 +264,32 @@ app.post('/api/answer', auth, (req, res) => {
     gained,
     me: meView(getUser(u.id)),
   });
+});
+
+// Step-by-step hint: reveals the worked solution one step at a time (halves the XP for that question).
+app.post('/api/hint', auth, (req, res) => {
+  const L = loadQuestion(req.user.id, String((req.body || {}).qid || ''));
+  if (!L) return res.status(404).json({ error: 'Question not found.' });
+  if (L.row.context === 'mock') return res.status(400).json({ error: 'No hints during a mock paper.' });
+  const q = L.q;
+  const n = q.hints || 0;
+  const steps = q.solution || [];
+  if (n >= steps.length) return res.json({ index: n, total: steps.length, done: true });
+  if (!L.row.answered_at) {
+    q.hints = n + 1;
+    db.prepare('UPDATE questions SET data=? WHERE qid=?').run(JSON.stringify(q), L.row.qid);
+  }
+  res.json({ index: n, total: steps.length, step: steps[n], done: n + 1 >= steps.length });
+});
+
+// Redo: the same question (same numbers) as a fresh attempt.
+app.post('/api/redo', auth, (req, res) => {
+  const L = loadQuestion(req.user.id, String((req.body || {}).qid || ''));
+  if (!L) return res.status(404).json({ error: 'Question not found.' });
+  if (L.row.context === 'mock') return res.status(400).json({ error: 'Mock questions cannot be redone.' });
+  const { answers, graded, hints, ...q } = L.q;
+  const qid = storeQuestion(req.user.id, q, L.row.context);
+  res.json({ qid, context: L.row.context, firstOfType: false, ...publicQuestion(q) });
 });
 
 // ---------- mistake vault ----------

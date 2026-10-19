@@ -94,7 +94,8 @@ export class Fig {
   }
   raw(s) { this.items.push(s); return this; }
   toString() {
-    return `<svg class="diagram" viewBox="0 0 ${this.w} ${this.h}" xmlns="http://www.w3.org/2000/svg" role="img">${this.items.join('')}</svg>`;
+    const pts = Object.entries(this.pts).map(([k, [x, y]]) => `${k}=${f(x)},${f(y)}`).join('|');
+    return `<svg class="diagram" viewBox="0 0 ${this.w} ${this.h}" xmlns="http://www.w3.org/2000/svg" role="img" data-pts="${pts}">${this.items.join('')}</svg>`;
   }
 }
 const f = (n) => Math.round(n * 10) / 10;

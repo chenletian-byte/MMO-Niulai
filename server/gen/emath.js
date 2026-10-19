@@ -420,7 +420,7 @@ add({
     F.arrow('A', 'B').arrow('C', 'D');
     F.angle('Q', 'A', 'P', `${a}°`, 16);
     const { LT, L, map } = relabel(r, ['A', 'B', 'C', 'D', 'P', 'Q', 'R', 'S']);
-    let svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+    let svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
     const lines = [
       [`$${SL(L('∠BQR'))} =$`, N({ type: 'num', v: String(a) }, '', '^\\circ'), R('vert_opp', ['alt', 'corr'])],
       [`$${SL(L('∠QRC'))} =$`, N({ type: 'num', v: String(a) }, '', '^\\circ'), R('alt', ['corr', 'co_int', 'vert_opp'])],
@@ -502,7 +502,7 @@ add({
       ];
       sol = ['Parallel lines give two pairs of alternate angles.', 'Two angles and a corresponding side give congruence by AAS; many schools also accept ASA.'];
     }
-    const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+    const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
     return { stem, diagram: svg, parts: [P('p', { lines, group: 'cong', prompt: 'Complete the proof.' })], solution: sol.concat(['Order of letters matters: matching vertices must be in the same position in both triangles.']) };
   },
 });
@@ -520,7 +520,7 @@ add({
       F.pt('A', 160, 20).pt('B', 40, 205).pt('C', 280, 205);
       F.pt('D', 160 - 120 * k, 20 + 185 * k, { off: [-12, 0] }).pt('E', 160 + 120 * k, 20 + 185 * k, { off: [12, 0] });
       F.poly(['A', 'B', 'C']).seg('D', 'E').arrow('D', 'E').arrow('B', 'C');
-      const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+      const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
       return {
         stem: LT(`$D$ and $E$ lie on $AB$ and $AC$ with $DE \\parallel BC$. $AD = ${ad}$ cm, $DB = ${db}$ cm and $DE = ${de}$ cm. Show that $\\triangle ADE \\sim \\triangle ABC$ and find $BC$.`),
         diagram: svg,
@@ -544,7 +544,7 @@ add({
     const ix = intersect(A, B, C, D);
     F.pt('A', ...A).pt('B', ...B).pt('C', ...C).pt('D', ...D).pt('X', ix[0], ix[1], { off: [8, -12] });
     F.seg('A', 'B').seg('C', 'D').seg('A', 'C', 'dg-line dg-dash').seg('D', 'B', 'dg-line dg-dash');
-    const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+    const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
     return {
       stem: LT(`The chords $AB$ and $CD$ of a circle meet at $X$. $AX = ${ax}$ cm, $XB = ${xb}$ cm and $CX = ${cx}$ cm. Show that $\\triangle AXC \\sim \\triangle DXB$ and find $XD$.`),
       diagram: svg,
@@ -619,7 +619,7 @@ add({
       ];
       sol = [LT('The tangent is perpendicular to the radius at the point of contact.'), LT(`$\\angle ATO = 180^\\circ - 90^\\circ - ${b}^\\circ = ${90 - b}^\\circ$`)];
     }
-    const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+    const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
     return { stem: stem + ' Find each angle, giving a reason.', diagram: svg, parts: [P('p', { lines, group: 'circle' })], solution: sol };
   },
 });
@@ -661,7 +661,7 @@ add({
     if (mode === 'hyp') {
       const a = r.int(3, 15), b = r.int(3, 15);
       F.label('A', 'B', `${a} cm`, -1).label('B', 'C', `${b} cm`, -1);
-      const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+      const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
       return {
         stem: LT(`In $\\triangle ABC$, $\\angle ABC = 90^\\circ$, $AB = ${a}$ cm and $BC = ${b}$ cm. Find $AC$, correct to 3 significant figures.`),
         diagram: svg,
@@ -672,7 +672,7 @@ add({
     if (mode === 'opp') {
       const ang = r.int(20, 70), h = r.int(5, 20);
       F.label('A', 'C', `${h} cm`, 1).angle('A', 'B', 'C', `${ang}°`, 26);
-      const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+      const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
       const bc = h * Math.sin((ang * Math.PI) / 180);
       return {
         stem: LT(`In $\\triangle ABC$, $\\angle ABC = 90^\\circ$, $\\angle BAC = ${ang}^\\circ$ and $AC = ${h}$ cm. Find $BC$, correct to 3 significant figures.`),
@@ -683,7 +683,7 @@ add({
     }
     const a = r.int(4, 15), b = r.int(4, 15);
     F.label('A', 'B', `${a} cm`, -1).label('B', 'C', `${b} cm`, -1);
-    const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+    const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
     const ang = (Math.atan(b / a) * 180) / Math.PI;
     return {
       stem: LT(`In $\\triangle ABC$, $\\angle ABC = 90^\\circ$, $AB = ${a}$ cm and $BC = ${b}$ cm. Find $\\angle BAC$, correct to 1 decimal place.`),

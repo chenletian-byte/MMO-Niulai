@@ -612,7 +612,7 @@ add({
       const s1 = -bq - Math.sqrt(bq * bq - cq), s2 = -bq + Math.sqrt(bq * bq - cq);
       F.circle(cx, cy, rr).pt('T', ...T0).pt('A', ...A0).pt('B', T0[0] + s1 * ux, T0[1] + s1 * uy, { off: [-4, 13] }).pt('C', T0[0] + s2 * ux, T0[1] + s2 * uy);
       F.seg('T', 'A').seg('T', 'C').seg('A', 'B', 'dg-line dg-dash').seg('A', 'C', 'dg-line dg-dash');
-      const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+      const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
       return {
         stem: LT(`$TA$ is a tangent to the circle at $A$. The line $TBC$ meets the circle at $B$ and $C$. Prove that $\\triangle TAB \\sim \\triangle TCA$ and hence that $TA^2 = TB \\times TC$. Given $TB = ${tb}$ cm and $BC = ${bc}$ cm, find $TA$.`),
         diagram: svg,
@@ -639,7 +639,7 @@ add({
       const A0 = [T0[0] + tl * Math.cos(-off), T0[1] + tl * Math.sin(-off)], B0 = [T0[0] + tl * Math.cos(off), T0[1] + tl * Math.sin(off)];
       F.circle(cx, cy, rr).pt('T', ...T0).pt('A', ...A0).pt('B', ...B0).pt('O', cx, cy, { off: [12, 0] });
       F.seg('T', 'A').seg('T', 'B').seg('O', 'A').seg('O', 'B').seg('O', 'T', 'dg-line dg-dash').right('A', 'T', 'O').right('B', 'T', 'O');
-      const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+      const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
       return {
         stem: LT('$TA$ and $TB$ are tangents from $T$ to the circle with centre $O$. Prove that $\\triangle OAT \\cong \\triangle OBT$ and hence that $TA = TB$ and $OT$ bisects $\\angle ATB$.'),
         diagram: svg,
@@ -660,7 +660,7 @@ add({
     const { L, LT, map } = relabel(r, ['A', 'B', 'C', 'M', 'N']);
     F.pt('A', 150, 22).pt('B', 40, 205).pt('C', 285, 205).pt('M', 95, 113.5, { off: [-13, 0] }).pt('N', 217.5, 113.5, { off: [13, 0] });
     F.poly(['A', 'B', 'C']).seg('M', 'N').tick('A', 'M', 1).tick('M', 'B', 1).tick('A', 'N', 2).tick('N', 'C', 2);
-    const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
+    const svg = F.toString().replace(/>([A-Z])<|([|"])([A-Z])=/g, (m, c, q, d) => (c ? `>${map[c] || c}<` : `${q}${map[d] || d}=`));
     return {
       stem: LT('$M$ and $N$ are the midpoints of $AB$ and $AC$. Prove that $MN \\parallel BC$ and $MN = \\tfrac12 BC$.'),
       diagram: svg,

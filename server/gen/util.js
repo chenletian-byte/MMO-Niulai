@@ -126,6 +126,7 @@ const REASON_GROUPS = {
   alg: ['disc_neg', 'disc_pos', 'disc_zero', 'coeff_pos', 'sq_nonneg', 'd2_pos', 'd2_neg', 'dy_pos', 'pyth_id', 'sec_id', 'double_angle', 'factor_thm', 'remainder_thm'],
 };
 
+// eslint-disable-next-line no-unused-vars
 function reasonChips(r, accept, extra, tier, group) {
   const pool = (REASON_GROUPS[group] || Object.keys(REASONS)).filter((x) => !accept.includes(x));
   if (tier === 'basic') {
@@ -167,6 +168,10 @@ export function finalize(r, parts, tier) {
     } else if (p._t === 'proof') {
       const { _t, id, lines, group = 'lines', ...rest } = p;
       const blanks = {};
+      // One shared answer bank for the whole proof: every correct chip once per use, plus distractors.
+      const bank = [];
+      const reasonExtras = [];
+      const stmtExtras = [];
       let bi = 0;
       const pubLines = lines.map((line) =>
         line.map((seg) => {
@@ -174,24 +179,25 @@ export function finalize(r, parts, tier) {
           const bid = 'b' + bi++;
           if (seg._b === 'reason') {
             blanks[bid] = { type: 'reason', accept: seg.accept };
-            const mode = tier === 'advanced' ? 'text' : 'chips';
-            return { blank: bid, type: 'reason', mode, chips: mode === 'chips' ? reasonChips(r, seg.accept, seg.extra, tier, group) : undefined };
+            if (tier === 'advanced') return { blank: bid, type: 'reason', mode: 'text' };
+            bank.push({ t: 'reason', v: seg.accept[0] });
+            reasonExtras.push(...(seg.extra || []));
+            return { blank: bid, type: 'reason', mode: 'chips' };
           }
           if (seg._b === 'stmt') {
-            if (tier === 'basic') {
-              const ds = [...seg.distractors, ...autoDistractors(seg.accept[0])].filter((v, i, a) => a.indexOf(v) === i && v !== seg.accept[0]).slice(0, 3);
-              const opts = r.shuffle([seg.accept[0], ...ds]);
-              blanks[bid] = { type: 'stmt', accept: seg.accept, correctOpt: opts.indexOf(seg.accept[0]) };
-              return { blank: bid, type: 'stmt', mode: 'chips', options: opts };
-            }
             blanks[bid] = { type: 'stmt', accept: seg.accept };
-            return { blank: bid, type: 'stmt', mode: 'type' };
+            if (tier !== 'basic') return { blank: bid, type: 'stmt', mode: 'type' };
+            bank.push({ t: 'stmt', v: seg.accept[0] });
+            const d = [...seg.distractors, ...autoDistractors(seg.accept[0])].find((v) => v !== seg.accept[0]);
+            if (d) stmtExtras.push({ t: 'stmt', v: d });
+            return { blank: bid, type: 'stmt', mode: 'chips' };
           }
           if (seg._b === 'expr') {
             if (tier === 'basic') {
-              const opts = r.shuffle([seg.latex, ...seg.distractors.slice(0, 3)]);
-              blanks[bid] = { type: 'stmt', accept: [], correctOpt: opts.indexOf(seg.latex), show: seg.latex };
-              return { blank: bid, type: 'stmt', mode: 'chips', options: opts, latex: true };
+              blanks[bid] = { type: 'stmt', accept: [], show: seg.latex };
+              bank.push({ t: 'tex', v: seg.latex });
+              if (seg.distractors[0]) stmtExtras.push({ t: 'tex', v: seg.distractors[0] });
+              return { blank: bid, type: 'stmt', mode: 'chips' };
             }
             blanks[bid] = { type: 'math', key: seg.key, show: seg.latex };
             return { blank: bid, type: 'math', kb: seg.kb };
@@ -203,8 +209,19 @@ export function finalize(r, parts, tier) {
           return { tx: '?' };
         })
       );
+      if (bank.length) {
+        const usedReasons = new Set(bank.filter((b) => b.t === 'reason').map((b) => b.v));
+        let rd;
+        if (tier === 'basic') {
+          const pool = [...reasonExtras, ...r.shuffle(REASON_GROUPS[group] || [])].filter((x, i, a) => a.indexOf(x) === i && !usedReasons.has(x));
+          rd = pool.slice(0, Math.min(4, Math.max(2, usedReasons.size)));
+        } else rd = (REASON_GROUPS[group] || []).filter((x) => !usedReasons.has(x));
+        const sd = stmtExtras.filter((x, i, a) => a.findIndex((y) => y.v === x.v) === i && !bank.some((b) => b.v === x.v)).slice(0, 3);
+        const all = r.shuffle([...bank, ...rd.map((v) => ({ t: 'reason', v })), ...sd]);
+        rest.bank = all.map((b, i) => ({ id: 'k' + i, ...b }));
+      }
       pub.push({ kind: 'proof', id, lines: pubLines, ...rest });
-      key[id] = { blanks, answers: Object.fromEntries(Object.entries(blanks).map(([b, v]) => [b, v])) };
+      key[id] = { blanks };
     }
   }
   return { parts: pub, key };

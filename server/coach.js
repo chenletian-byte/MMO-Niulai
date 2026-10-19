@@ -42,7 +42,7 @@ function summarise(userId, since) {
 
 function ruleText(name, s, overall) {
   const lines = [];
-  const tn = (t) => `${SYLLABUS[t.subject].short} ${t.topic} (${SYLLABUS[t.subject].topics[t.topic] || t.topic})`;
+  const tn = (t) => `${SYLLABUS[t.subject].short}: ${SYLLABUS[t.subject].topics[t.topic] || t.topic}`;
   if (!s.attempts) {
     lines.push(`You dropped in ${s.visits || 1} time${s.visits === 1 ? '' : 's'} but didn't answer anything — even three questions keeps the thread warm.`);
   } else {

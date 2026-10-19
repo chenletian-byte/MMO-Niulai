@@ -15,7 +15,7 @@ const modelAnswer = (q) => {
       const a = {};
       for (const [b, bk] of Object.entries(k.blanks)) {
         if (bk.type === 'reason') a[b] = '#' + bk.accept[0];
-        else if (bk.type === 'stmt') a[b] = bk.correctOpt != null ? '#opt:' + bk.correctOpt : bk.accept[0];
+        else if (bk.type === 'stmt') a[b] = bk.show ? '#tex:' + bk.show : (q.tier === 'basic' ? '#stmt:' : '') + bk.accept[0];
         else a[b] = bk.key.v;
       }
       ans[p.id] = a;
@@ -33,6 +33,17 @@ for (const t of TEMPLATES) {
         // remove form-only constraints for self-test
         for (const k of Object.values(q.key)) { if (k && k.form) delete k.form; if (k && k.forbid) delete k.forbid; }
         const g = gradeQuestion(q, modelAnswer(q));
+        for (const p of q.parts) if (p.kind === 'proof') {
+          const chipSlots = p.lines.flat().filter((x) => x.blank && x.mode === 'chips');
+          const bank = (p.bank || []).map((b) => b.t + ':' + b.v);
+          for (const sl of chipSlots) {
+            const bk = q.key[p.id].blanks[sl.blank];
+            const want = bk.type === 'reason' ? 'reason:' + bk.accept[0] : bk.show ? 'tex:' + bk.show : 'stmt:' + bk.accept[0];
+            const i = bank.indexOf(want);
+            if (i < 0) throw new Error('bank missing ' + want);
+            bank.splice(i, 1);
+          }
+        }
         revealKey(q);
         const bad = JSON.stringify(q).match(/NaN|Infinity|[^a-z ]undefined|undefined[^a-z ."]/);
         if (!g.ok || bad) {

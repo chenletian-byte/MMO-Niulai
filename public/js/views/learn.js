@@ -31,7 +31,7 @@ export function learnView(root, args, params) {
   setCombo(me.streak);
   const topicName = topic ? state.meta.syllabus[subject].topics[topic] : '';
   const header = h('div', { class: 'page-head' },
-    h('div', {}, h('div', { class: 'kicker' }, SUBJ[subject].long), h('h1', {}, SUBJ[subject].name + ' practice'), topic ? h('div', { class: 'row small' }, h('span', { class: 'chip violet' }, topic + ' · ' + topicName), h('a', { href: '#/learn/' + subject, class: 'small' }, 'clear filter')) : h('div', { class: 'small muted' }, 'Random questions across the syllabus, weighted towards what you haven’t mastered.')),
+    h('div', {}, h('div', { class: 'kicker' }, SUBJ[subject].long), h('h1', {}, SUBJ[subject].name + ' practice'), topic ? h('div', { class: 'row small' }, h('span', { class: 'chip violet' }, topicName), h('a', { href: '#/learn/' + subject, class: 'small' }, 'clear filter')) : h('div', { class: 'small muted' }, 'Random questions across the syllabus, weighted towards what you haven’t mastered.')),
     h('div', { class: 'row wrap' }, combo, seg),
   );
   const barsBox = h('div', { class: 'card tight' }, bars(me.subjects[subject]));
@@ -51,7 +51,7 @@ export function learnView(root, args, params) {
   }
   function mount(q) {
     stage.innerHTML = '';
-    player = Player(q, { mode: 'practice', onSubmit: async (answers, timeMs, btn) => {
+    player = Player(q, { mode: 'practice', onRedo: () => redo(q), onSubmit: async (answers, timeMs, btn) => {
       const res = await api('/answer', { body: { qid: q.qid, answers, timeMs } });
       player.showResult(res);
       const r = btn.getBoundingClientRect();
@@ -65,7 +65,8 @@ export function learnView(root, args, params) {
       barsBox.append(bars(res.me.subjects[subject]));
       badgeToasts(res.gained);
       window.__app.refreshNav();
-      btn.replaceWith(h('button', { class: 'btn grad', onclick: next }, 'Next question'));
+      player.afterCheck(next);
+      if (res.gained.hintPenalty) toast('Hints used', `XP halved for this question (−${res.gained.hintPenalty})`);
       if (res.firstOfType) toast('New question type recorded', 'Your next attempt at this type will count towards accuracy');
       if (res.gained.unlocks.length) {
         await playUnlocks(res.gained.unlocks);
@@ -74,6 +75,13 @@ export function learnView(root, args, params) {
       }
     } });
     stage.append(player.el);
+  }
+  async function redo(q) {
+    if (player) player.destroy();
+    stage.innerHTML = '<div class="loader"></div>';
+    const nq = await api('/redo', { body: { qid: q.qid } });
+    mount(nq);
+    window.scrollTo({ top: stage.offsetTop - 12, behavior: 'smooth' });
   }
   next();
   return { destroy() { if (player) player.destroy(); } };

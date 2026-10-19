@@ -30,7 +30,7 @@ export function vaultView(root) {
     shown.forEach((m) => (byTopic[m.subject + ':' + m.topic] = byTopic[m.subject + ':' + m.topic] || []).push(m));
     for (const [k, arr] of Object.entries(byTopic)) {
       const [s, t] = k.split(':');
-      list.append(h('div', { class: 'caps', style: { margin: '18px 4px 8px' } }, `${SUBJ[s].name} · ${t} · ${state.meta.syllabus[s].topics[t] || ''}`));
+      list.append(h('div', { class: 'caps', style: { margin: '18px 4px 8px' } }, `${SUBJ[s].name} · ${state.meta.syllabus[s].topics[t] || ''}`));
       for (const m of arr) {
         list.append(h('div', { class: 'card tight fade-in', style: { marginBottom: '8px' } },
           h('div', { class: 'row spread' }, h('b', {}, m.title), h('span', { class: 'chip ' + (m.resolved ? 'teal' : 'violet') }, m.resolved ? 'Redeemed' : m.retries ? `${m.retries} retr${m.retries === 1 ? 'y' : 'ies'}` : 'New')),
@@ -63,7 +63,7 @@ export function vaultView(root) {
       if (res.ok) { burst(r.left + r.width / 2, r.top + r.height / 2); toast('Redeemed', 'This mistake is cleared from the vault'); }
       state.me = res.me;
       badgeToasts(res.gained);
-      btn.replaceWith(h('button', { class: 'btn grad', onclick: () => back.click() }, 'Back to vault'));
+      player.afterCheck(() => back.click());
     } });
     stage.append(h('div', { class: 'stack' }, back, h('div', { class: 'small muted' }, 'Same idea, fresh numbers. Get it right to redeem the original.'), player.el));
   }

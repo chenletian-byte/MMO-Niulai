@@ -21,7 +21,7 @@ export function rich(text) {
   return out.join('');
 }
 function plain(t) {
-  return esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  return esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
 }
 // statements like "∠ABC=∠DEF" → LaTeX
 export function stmtTex(s) {

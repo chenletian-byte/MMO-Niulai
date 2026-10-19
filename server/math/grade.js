@@ -219,7 +219,9 @@ export function gradeQuestion(q, answers) {
           if (typeof v === 'string' && v.startsWith('#')) b = bk.accept.includes(v.slice(1));
           else if (typeof v === 'string') b = matchReasonText(v, bk.accept);
         } else if (bk.type === 'stmt') {
-          if (typeof v === 'string' && v.startsWith('#opt:')) b = Number(v.slice(5)) === bk.correctOpt;
+          if (typeof v === 'string' && v.startsWith('#tex:')) b = !!bk.show && v.slice(5) === bk.show;
+          else if (typeof v === 'string' && v.startsWith('#stmt:')) { const cv = canonStatement(v.slice(6)); b = bk.accept.some((a) => canonStatement(a) === cv); }
+          else if (typeof v === 'string' && v.startsWith('#opt:')) b = Number(v.slice(5)) === bk.correctOpt;
           else if (typeof v === 'string') {
             const cv = canonStatement(v);
             b = bk.accept.some((a) => canonStatement(a) === cv);
