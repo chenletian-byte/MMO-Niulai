@@ -66,3 +66,16 @@ npm test             # 自检：所有题型 × 所有难度 × 60 个随机种�
 ```
 
 答案语法：`@sqrt(2)`、`@pi`、`@e`、`@ln(x)`、`@sin(x)`，分数写 `(3/4)`；`acc` 可为 `exact`、`sf3`、`dp1`、`dp2`。
+
+## 发布上线
+
+**Render（推荐，一键）**：在 Render 选 *New → Blueprint*，连接本仓库，它会读取 `render.yaml` 自动建好网站和 1 GB 持久磁盘（SQLite 数据放在那里，重启不丢）。需要 DeepSeek 评价时在 Render 后台填 `DEEPSEEK_API_KEY`。
+
+**Docker（任何服务器）**：
+
+```bash
+docker build -t mmo-maths .
+docker run -d -p 80:3000 -v mmo-data:/data --name mmo mmo-maths
+```
+
+上线后用 HTTPS 访问时保持 `SECURE_COOKIE=1`。
