@@ -387,7 +387,23 @@ input[type='range'] { width: 100%; accent-color: var(--violet); }
 /* ---------- leaderboard ---------- */
 .lb-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; }
 .lb-row + .lb-row { margin-top: 4px; }
-.lb-row.me { background: var(--violet-soft); position: sticky; bottom: calc(76px + var(--kb-h)); }
+.lb-row.me { background: color-mix(in srgb, var(--violet) 16%, var(--surface)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--violet) 40%, transparent); }
+.lb-row.tap, .pod.tap { cursor: pointer; transition: background 0.15s, transform 0.1s; }
+.lb-row.tap:hover { background: var(--surface-2); }
+.lb-row.me.tap:hover { background: color-mix(in srgb, var(--violet) 22%, var(--surface)); }
+.lb-row.tap:active, .pod.tap:active { transform: scale(0.99); }
+.lb-row.tap:focus-visible, .pod.tap:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.pod.me { box-shadow: inset 0 0 0 2px var(--violet); }
+.lb-row.flash { animation: lbFlash 1.4s ease; }
+@keyframes lbFlash { 0%, 40% { box-shadow: inset 0 0 0 2px var(--violet), 0 0 0 6px color-mix(in srgb, var(--violet) 25%, transparent); } }
+.lb-pin {
+  position: fixed; z-index: 45; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(76px + env(safe-area-inset-bottom, 0px)); max-width: 916px; margin: 0 auto; cursor: pointer;
+  background: color-mix(in srgb, var(--violet) 14%, var(--surface)); border: 1px solid color-mix(in srgb, var(--violet) 45%, transparent);
+  box-shadow: var(--shadow-lg); transition: opacity 0.22s, transform 0.22s;
+}
+.lb-pin.off { opacity: 0; transform: translateY(14px); pointer-events: none; }
+@media (min-width: 821px) { .lb-pin { left: calc(232px + 32px); right: 32px; bottom: 18px; } }
 .lb-rank { width: 30px; text-align: center; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
 .lb-name { font-weight: 600; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .lb-badges { display: inline-flex; gap: 2px; }

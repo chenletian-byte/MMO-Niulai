@@ -431,7 +431,7 @@ add({
       stem: LT(`In the diagram, $AB \\parallel CD$ and the straight line $PQRS$ cuts them at $Q$ and $R$. $\\angle AQP = ${a}^\\circ$. Find each angle, stating your reason.`),
       diagram: svg,
       parts: [P('p', { lines, group: 'lines' })],
-      solution: [LT(`$\\angle BQR = ${a}^\\circ$ (vert. opp. ∠s)`), LT(`$\\angle QRC = \\angle BQR = ${a}^\\circ$ (alt. ∠s, $AB \\parallel CD$)`), LT(`$\\angle QRD = 180^\\circ - ${a}^\\circ = ${180 - a}^\\circ$ (∠s on a str. line)`), ...(tier !== 'basic' ? [LT(`$\\angle DRS = \\angle BQR = ${a}^\\circ$ (corr. ∠s)`)] : [])],
+      solution: [LT(`$\\angle BQR = ${a}^\\circ$ (vertically opposite angles)`), LT(`$\\angle QRC = \\angle BQR = ${a}^\\circ$ (alternate angles, $AB \\parallel CD$)`), LT(`$\\angle QRD = 180^\\circ - ${a}^\\circ = ${180 - a}^\\circ$ (angles on a straight line)`), ...(tier !== 'basic' ? [LT(`$\\angle DRS = \\angle BQR = ${a}^\\circ$ (corresponding angles)`)] : [])],
     };
   },
 });
@@ -487,7 +487,7 @@ add({
         [S(L('△OMA≅△OMB'), [L('△OMA≅△MOB'), L('△OMA∼△OMB')]), R('rhs', ['sas', 'sss', 'asa'])],
         [hard ? S(L('AM=BM')) : `$${SL(L('AM = BM'))}$`, R('cong_sides', ['radii', 'midpoint'])],
       ];
-      sol = ['Right angle + hypotenuse (the radii) + one side ⇒ RHS.', 'This is exactly why the perpendicular from the centre bisects a chord.'];
+      sol = ['A right angle, equal hypotenuses (the radii) and a common side give congruence by right angle-hypotenuse-side (RHS).', 'This is exactly why the perpendicular from the centre bisects a chord.'];
     } else {
       F.pt('A', 60, 45).pt('B', 260, 45).pt('C', 260, 185).pt('D', 60, 185).pt('X', 160, 115, { off: [14, 0] });
       F.seg('A', 'B').seg('D', 'C').seg('A', 'C').seg('B', 'D').arrow('A', 'B').arrow('D', 'C');
@@ -500,7 +500,7 @@ add({
         [S(L('△ABX≅△CDX'), [L('△ABX≅△DCX'), L('△ABX∼△CDX')]), R(['aas', 'asa'], ['sas', 'sss', 'rhs'])],
         [hard ? S(L('AX=CX')) : `$${SL(L('AX = CX'))}$`, R('cong_sides', ['given', 'midpoint'])],
       ];
-      sol = ['Parallel lines give two pairs of alternate angles.', 'Two angles and a corresponding side ⇒ AAS (also accepted as ASA in many schools).'];
+      sol = ['Parallel lines give two pairs of alternate angles.', 'Two angles and a corresponding side give congruence by angle-angle-side (AAS); many schools also accept angle-side-angle (ASA).'];
     }
     const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
     return { stem, diagram: svg, parts: [P('p', { lines, group: 'cong', prompt: 'Complete the proof.' })], solution: sol.concat(['Order of letters matters: matching vertices must be in the same position in both triangles.']) };
@@ -588,7 +588,7 @@ add({
         [`$${SL(L('∠ACB'))} =$`, N({ type: 'num', v: '90' }, '', '^\\circ'), R('semicircle', ['centre', 'tan_rad', 'same_seg'])],
         [`$${SL(L('∠ABC'))} =$`, N({ type: 'num', v: String(90 - a) }, '', '^\\circ'), R('tri_sum', ['adj_line', 'ext_ang', 'isos'])],
       ];
-      sol = [LT('$\\angle ACB = 90^\\circ$ (∠ in semicircle)'), LT(`$\\angle ABC = 180^\\circ - 90^\\circ - ${a}^\\circ = ${90 - a}^\\circ$`)];
+      sol = [LT('$\\angle ACB = 90^\\circ$ (angle in a semicircle)'), LT(`$\\angle ABC = 180^\\circ - 90^\\circ - ${a}^\\circ = ${90 - a}^\\circ$`)];
     } else if (cfg === 1) {
       const a = r.int(25, 80);
       const A = polar(cx, cy, rad, 270 - a), B = polar(cx, cy, rad, 270 + a), Cc = polar(cx, cy, rad, 90 + r.int(-25, 25));
@@ -597,7 +597,7 @@ add({
       stem = LT(`$A$, $B$ and $C$ lie on the circle with centre $O$. $\\angle AOB = ${2 * a}^\\circ$.`);
       lines = [[`$${SL(L('∠ACB'))} =$`, N({ type: 'num', v: String(a) }, '', '^\\circ'), R('centre', ['same_seg', 'semicircle', 'cyclic'])]];
       if (tier !== 'basic') lines.push([`$${SL(L('∠OAB'))} =$`, N({ type: 'num', v: String(90 - a) }, '', '^\\circ'), R('isos', ['radii', 'tri_sum', 'tan_rad'])]);
-      sol = [LT(`$\\angle ACB = \\tfrac12 \\angle AOB = ${a}^\\circ$ (∠ at centre = 2∠ at circumference)`), ...(tier !== 'basic' ? [LT(`$OA = OB$ (radii), so $\\triangle OAB$ is isosceles: $\\angle OAB = \\dfrac{180^\\circ - ${2 * a}^\\circ}{2} = ${90 - a}^\\circ$`)] : [])];
+      sol = [LT(`$\\angle ACB = \\tfrac12 \\angle AOB = ${a}^\\circ$ (angle at centre is twice angle at circumference)`), ...(tier !== 'basic' ? [LT(`$OA = OB$ (radii), so $\\triangle OAB$ is isosceles: $\\angle OAB = \\dfrac{180^\\circ - ${2 * a}^\\circ}{2} = ${90 - a}^\\circ$`)] : [])];
     } else if (cfg === 2) {
       const a = r.int(55, 125);
       const B = polar(cx, cy, rad, 90), A = polar(cx, cy, rad, 270 - a), Cc = polar(cx, cy, rad, 270 + a), D = polar(cx, cy, rad, 270);
@@ -605,7 +605,7 @@ add({
       F.poly(['A', 'B', 'C', 'D']).angle('B', 'A', 'C', `${a}°`, 18);
       stem = LT(`$ABCD$ is a cyclic quadrilateral with $\\angle ABC = ${a}^\\circ$.`);
       lines = [[`$${SL(L('∠ADC'))} =$`, N({ type: 'num', v: String(180 - a) }, '', '^\\circ'), R('cyclic', ['same_seg', 'co_int', 'centre'])]];
-      sol = [LT(`$\\angle ADC = 180^\\circ - ${a}^\\circ = ${180 - a}^\\circ$ (∠s in opp. segments)`)];
+      sol = [LT(`$\\angle ADC = 180^\\circ - ${a}^\\circ = ${180 - a}^\\circ$ (angles in opposite segments)`)];
     } else {
       const b = r.int(28, 55);
       const A = [cx, cy + rad];
@@ -617,7 +617,7 @@ add({
         [`$${SL(L('∠OAT'))} =$`, N({ type: 'num', v: '90' }, '', '^\\circ'), R('tan_rad', ['semicircle', 'alt_seg', 'radii'])],
         [`$${SL(L('∠ATO'))} =$`, N({ type: 'num', v: String(90 - b) }, '', '^\\circ'), R('tri_sum', ['ext_ang', 'adj_line', 'isos'])],
       ];
-      sol = [LT('Tangent ⊥ radius at the point of contact'), LT(`$\\angle ATO = 180^\\circ - 90^\\circ - ${b}^\\circ = ${90 - b}^\\circ$`)];
+      sol = [LT('The tangent is perpendicular to the radius at the point of contact.'), LT(`$\\angle ATO = 180^\\circ - 90^\\circ - ${b}^\\circ = ${90 - b}^\\circ$`)];
     }
     const svg = F.toString().replace(/>([A-Z])</g, (m, c) => `>${map[c] || c}<`);
     return { stem: stem + ' Find each angle, giving a reason.', diagram: svg, parts: [P('p', { lines, group: 'circle' })], solution: sol };

@@ -532,7 +532,7 @@ add({
           M('k', { label: '(a)', prompt: `Find $k$ where the equation is $(x ${a < 0 ? '+' : '-'} ${Math.abs(a)})^2 + (y ${b < 0 ? '+' : '-'} ${Math.abs(b)})^2 = k$.`, pre: 'k =', kb: 'num', key: { type: 'num', v: String(R2) } }),
           ...(sv * v !== 0 ? [M('m', { label: '(b)', prompt: 'Find the gradient of the tangent at $P$.', pre: 'm =', kb: 'num', key: { type: 'num', v: frk(-su * u, sv * v) } })] : []),
         ],
-        solution: [`$k = r^2 = (${px} - ${a})^2 + (${py} - ${b})^2 = ${R2}$`, `Gradient of radius $= ${fr(sv * v, su * u || 1)}$`, 'Tangent ⊥ radius ⇒ gradient $= -\\dfrac{1}{m_{\\text{radius}}}$' + (sv * v ? ` $= ${fr(-su * u, sv * v)}$` : '')],
+        solution: [`$k = r^2 = (${px} - ${a})^2 + (${py} - ${b})^2 = ${R2}$`, `Gradient of radius $= ${fr(sv * v, su * u || 1)}$`, 'Tangent is perpendicular to the radius, so its gradient $= -\\dfrac{1}{m_{\\text{radius}}}$' + (sv * v ? ` $= ${fr(-su * u, sv * v)}$` : '')],
       };
     }
     return {
@@ -654,7 +654,7 @@ add({
             [hard ? S(L('∠ATO=∠BTO')) : `$${SL(L('∠ATO = ∠BTO'))}$`, R('cong_angles', ['alt_seg', 'isos'])],
           ],
         })],
-        solution: ['Radius ⊥ tangent gives the right angles; $OT$ is the common hypotenuse ⇒ RHS.', 'This proves the “tangents from an external point” property — so in an exam you may not quote it as the reason here.'],
+        solution: ['The radius is perpendicular to the tangent, which gives the right angles; $OT$ is the common hypotenuse, so the triangles are congruent by right angle-hypotenuse-side (RHS).', 'This proves the “tangents from an external point” property — so in an exam you may not quote it as the reason here.'],
       };
     }
     const { L, LT, map } = relabel(r, ['A', 'B', 'C', 'M', 'N']);
@@ -853,7 +853,7 @@ const AM_CONCEPTS = [
   { topic: 'G1', q: 'The principal value of $\\sin^{-1}(-\\frac12)$ is', o: ['$-30^\\circ$', '$210^\\circ$', '$330^\\circ$', '$150^\\circ$'], e: 'Principal values of $\\sin^{-1}$ lie in $[-90^\\circ, 90^\\circ]$.' },
   { topic: 'G2', q: 'Two lines with gradients $m_1$ and $m_2$ are perpendicular when', o: ['$m_1 m_2 = -1$', '$m_1 = m_2$', '$m_1 + m_2 = 0$', '$m_1 m_2 = 1$'], e: 'Perpendicular gradients are negative reciprocals.' },
   { topic: 'C1', q: '$\\frac{d}{dx}(\\ln 5x)$ equals', o: ['$\\frac1x$', '$\\frac5x$', '$\\frac{1}{5x}$', '$5\\ln x$'], e: '$\\ln 5x = \\ln 5 + \\ln x$, and $\\ln 5$ is a constant.' },
-  { topic: 'G3', q: 'In a proof, which statement can you quote as a reason for “∠TAB = ∠ACB” where TA is a tangent?', o: ['Alternate segment theorem', 'Angles in the same segment', 'Tangent ⊥ radius', 'Alternate angles'], e: 'The angle between a tangent and a chord equals the angle in the alternate segment.' },
+  { topic: 'G3', q: 'In a proof, which statement can you quote as a reason for “∠TAB = ∠ACB” where TA is a tangent?', o: ['Alternate segment theorem', 'Angles in the same segment', 'Tangent is perpendicular to radius', 'Alternate angles'], e: 'The angle between a tangent and a chord equals the angle in the alternate segment.' },
 ];
 add({
   id: 'am-concept', topic: 'MIX', title: 'Concepts and definitions', tiers: ['basic', 'challenging', 'advanced'],

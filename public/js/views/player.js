@@ -211,7 +211,7 @@ export function Player(q, { mode = 'practice', onSubmit, number } = {}) {
           slots[bid] = { el, type: 'reason', mode: 'chips', options: seg.chips, value: null };
           row.append(el);
         } else if (seg.type === 'reason') {
-          const inp = kbInput({ placeholder: 'reason, e.g. alt. ∠s', 'data-kbl': 'abc', maxlength: 80 });
+          const inp = kbInput({ placeholder: 'reason, e.g. alternate angles', 'data-kbl': 'abc', maxlength: 80 });
           inp.style.cssText = 'width:auto;flex:1;min-width:180px;font-size:15px;padding:8px 12px';
           const wrap = h('span', { class: 'slot reason', style: { padding: '2px 4px', minWidth: '200px', flex: '1' } }, inp);
           wrap._bid = bid;
